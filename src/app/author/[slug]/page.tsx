@@ -99,7 +99,5 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 export async function generateStaticParams() {
   return []; // Will be generated on-demand (ISR)
 }
-  return authors.map((author: any) => ({ slug: author.slug }));
-}
 
 export const revalidate = 3600;
