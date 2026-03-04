@@ -1,18 +1,18 @@
-import { getArticlesByCategory } from '@/lib/directus/queries';
-import { getAssetUrl } from '@/lib/directus/client';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { directus } from '@/lib/directus/client';
 import { readItems } from '@directus/sdk';
+import { getAssetUrl } from '@/lib/directus/client';
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { slug } = await params; // ✅ await params
+  const { slug } = await params;
 
+  // Fetch category details
   const categories = await directus.request(
     readItems('categories', {
       filter: { slug: { _eq: slug } },
@@ -26,7 +26,25 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const category = categories[0];
-  const articles = await getArticlesByCategory(slug);
+
+  // Fetch articles in this category
+  const articles = await directus.request(
+    readItems('articles', {
+      filter: {
+        categories: { _in: [category.id] },
+        status: { _eq: 'published' },
+      },
+      sort: ['-published_at'],
+      fields: [
+        'id',
+        'headline',
+        'slug',
+        'published_at',
+        'excerpt',
+        'hero_image',
+      ],
+    })
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -42,7 +60,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
       {articles.length > 0 ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article) => (
+          {articles.map((article: any) => (
             <article key={article.id} className="border rounded-lg overflow-hidden hover:shadow-lg transition">
               {article.hero_image && (
                 <img
@@ -75,8 +93,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 // Temporarily disable static generation to avoid build-time API calls
 export async function generateStaticParams() {
   return []; // Will be generated on-demand (ISR)
-}
-  return categories.map((cat: any) => ({ slug: cat.slug }));
 }
 
 export const revalidate = 3600;
