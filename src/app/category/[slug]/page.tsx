@@ -72,12 +72,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   );
 }
 
+// Temporarily disable static generation to avoid build-time API calls
 export async function generateStaticParams() {
-  const categories = await directus.request(
-    readItems('categories', {
-      fields: ['slug'],
-    })
-  );
+  return []; // Will be generated on-demand (ISR)
+}
   return categories.map((cat: any) => ({ slug: cat.slug }));
 }
 

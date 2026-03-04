@@ -95,12 +95,10 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   );
 }
 
+// Temporarily disable static generation to avoid build-time API calls
 export async function generateStaticParams() {
-  const authors = await directus.request(
-    readItems('authors', {
-      fields: ['slug'],
-    })
-  );
+  return []; // Will be generated on-demand (ISR)
+}
   return authors.map((author: any) => ({ slug: author.slug }));
 }
 
