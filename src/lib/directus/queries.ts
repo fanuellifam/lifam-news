@@ -287,6 +287,43 @@ export const getArticlesByCategorySlug = cache(
   }
 );
 
+// ------------------------------------------------------------
+// Fetch a single author by ID
+// ------------------------------------------------------------
+export const getAuthorById = cache(async (id: number): Promise<Author | null> => {
+  try {
+    const result = await directus.request(
+      readItems('authors', {
+        filter: { id: { _eq: id } },
+        limit: 1,
+        fields: ['id', 'name', 'slug', 'image', 'bio'],
+      })
+    );
+    return result.length ? (result[0] as Author) : null;
+  } catch (error) {
+    console.error(`❌ Error fetching author #${id}:`, error);
+    return null;
+  }
+});
+
+// ------------------------------------------------------------
+// Fetch a single category by ID
+// ------------------------------------------------------------
+export const getCategoryById = cache(async (id: number): Promise<Category | null> => {
+  try {
+    const result = await directus.request(
+      readItems('categories', {
+        filter: { id: { _eq: id } },
+        limit: 1,
+        fields: ['id', 'name', 'slug', 'description'],
+      })
+    );
+    return result.length ? (result[0] as Category) : null;
+  } catch (error) {
+    console.error(`❌ Error fetching category #${id}:`, error);
+    return null;
+  }
+});
 /**
  * Fetch a single article by its slug.
  */
