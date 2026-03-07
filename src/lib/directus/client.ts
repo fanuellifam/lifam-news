@@ -1,15 +1,16 @@
 import { createDirectus, rest, staticToken } from '@directus/sdk';
 
-// Ensure the URL ends without a slash
 const url = process.env.NEXT_PUBLIC_DIRECTUS_URL?.replace(/\/$/, '') || 'http://localhost:8055';
 const token = process.env.DIRECTUS_TOKEN || '';
+
+// Debug: print first few characters of token (remove in production)
+console.log('Token starts with:', token.substring(0, 10));
 
 export const directus = createDirectus(url)
   .with(staticToken(token))
   .with(rest());
 
-// Helper to get the full URL for uploaded files
-export function getAssetUrl(fileId: string, options?: { w?: number; h?: number; fit?: 'cover' | 'contain' | 'inside' | 'outside' }) {
+export function getAssetUrl(fileId: string, options?: { w?: number; h?: number; fit?: string }) {
   if (!fileId) return '';
   let assetUrl = `${url}/assets/${fileId}`;
   if (options) {
@@ -22,4 +23,4 @@ export function getAssetUrl(fileId: string, options?: { w?: number; h?: number; 
   return assetUrl;
 }
 
-export default directus;
+export const getHeroUrl = getAssetUrl;
