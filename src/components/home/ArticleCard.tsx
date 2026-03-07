@@ -1,24 +1,33 @@
 import { Article } from '@/lib/directus/queries';
 import Link from 'next/link';
-import { getHeroUrl } from '@/lib/directus/client';
+import DirectusImage from '@/components/ui/DirectusImage';
 import { format } from 'date-fns';
 
 export default function ArticleCard({ article }: { article: Article }) {
   return (
-    <div className="group">
-      <Link href={`/article/${article.slug}`}>
+    <Link href={`/article/${article.slug}`} className="group block">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-xl">
         {article.featured_image && (
-          <img
-            src={getHeroUrl(article.featured_image, { w: 300, h: 200, fit: 'cover' })}
+          <DirectusImage
+            src={article.featured_image}
             alt=""
-            className="w-full h-40 object-cover rounded group-hover:opacity-90 transition"
+            width={400}
+            height={250}
+            className="w-full h-48 object-cover"
           />
         )}
-        <h3 className="font-semibold mt-2 group-hover:text-blue-600">{article.headline}</h3>
-        <time className="text-xs text-gray-500">
-          {format(new Date(article.publish_date), 'MMM d, yyyy')}
-        </time>
-      </Link>
-    </div>
+        <div className="p-4">
+          <h3 className="text-lg font-semibold line-clamp-2 group-hover:text-primary transition dark:text-white">
+            {article.headline}
+          </h3>
+          <p className="text-sm text-muted-foreground line-clamp-2 mt-1 dark:text-gray-400">
+            {article.summary}
+          </p>
+          <time className="text-xs text-muted-foreground mt-2 block dark:text-gray-400">
+            {format(new Date(article.publish_date), 'MMM d, yyyy')}
+          </time>
+        </div>
+      </div>
+    </Link>
   );
 }
