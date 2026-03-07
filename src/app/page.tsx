@@ -1,4 +1,4 @@
-import getFeaturedArticles from '@/lib/directus/queries';
+import { getFeaturedArticles } from '@/lib/directus/queries';
 import HeroSection from '@/components/home/HeroSection';
 import CategorySection from '@/components/home/CategorySection';
 import TrendingSidebar from '@/components/home/TrendingSidebar';
