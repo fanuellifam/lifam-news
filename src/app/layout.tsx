@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
+import Footer from '@/components/layout/footer';
 import BackToTop from '@/components/ui/BackToTop';
 import './globals.css';
 
