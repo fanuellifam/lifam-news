@@ -1,5 +1,5 @@
 import { Article } from '@/lib/directus/queries';
-import ArticleCard from './ArticleCard'; // we'll create next
+import ArticleCard from './ArticleCard';
 
 interface TopStoriesProps {
   articles: Article[];
