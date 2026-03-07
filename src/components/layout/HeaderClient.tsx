@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Search } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { Menu, X, Search, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface HeaderClientProps {
@@ -11,13 +12,24 @@ interface HeaderClientProps {
 
 export function HeaderClient({ categories }: HeaderClientProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   return (
     <>
       {/* Desktop icons + mobile menu trigger */}
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" aria-label="Search">
-          <Search className="h-5 w-5" />
+      <div className="flex items-center gap-2">
+        <Link href="/search">
+          <Button variant="ghost" size="icon" aria-label="Search">
+            <Search className="h-5 w-5" />
+          </Button>
+        </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
         <Button
           variant="ghost"
@@ -30,7 +42,7 @@ export function HeaderClient({ categories }: HeaderClientProps) {
         </Button>
       </div>
 
-      {/* Mobile slide‑in menu */}
+      {/* Mobile slide‑in menu (same as before) */}
       {isOpen && (
         <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden" onClick={() => setIsOpen(false)}>
           <div className="fixed right-0 top-0 h-full w-3/4 max-w-sm bg-background p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
